@@ -18,6 +18,13 @@
   <a href="https://github.com/UBOS-tech">GitHub</a>
 </h3>
 
+<div align="center">
+ 
+[![flow](https://img.shields.io/badge/platform-Node--RED-red)](https://flows.nodered.org/node/node-red-contrib-chromadb)
+[![npm](https://img.shields.io/npm/v/node-red-contrib-chromadb)](https://www.npmjs.com/package/node-red-contrib-chromadb)
+ 
+</div>
+
 <hr>
 
 ## Install
