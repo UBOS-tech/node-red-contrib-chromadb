@@ -601,3 +601,11 @@ return msg;
 `Promise`<`boolean`\>
 
 - The response from the API. True if successful.
+
+### Bugs reports and feature requests
+
+Please report any issues or feature requests at <a href="https://github.com/UBOS-tech/node-red-contrib-chromadb/issues">GitHub</a>.
+
+## License
+
+[MIT License](https://github.com/UBOS-tech/node-red-contrib-chromadb/blob/main/LICENSE)
