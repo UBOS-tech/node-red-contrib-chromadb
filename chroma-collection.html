@@ -1,0 +1,329 @@
+<script type="text/javascript">
+  RED.nodes.registerType("remote-server-collection", {
+    category: "config",
+    defaults: {
+      host: { value: "localhost", required: true },
+    },
+    label: function () {
+      return this.host;
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="remote-server-collection">
+  <div class="form-row">
+    <label for="node-config-input-host"
+      ><i class="fa fa-bookmark"></i> Host</label
+    >
+    <input type="text" id="node-config-input-host" />
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("chromadb-collection", {
+    category: "UBOS",
+    color: "#08B5FB",
+    defaults: {
+      remoteServer: { value: "", type: "remote-server-collection" },
+      name: { value: "" },
+      collection: { value: "" },
+      operation: {
+        value: "add",
+        required: true,
+      },
+    },
+
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: "chroma collection",
+    icon: "icon.png",
+    label: function () {
+      return this.name || "ChromaDB collection";
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="chromadb-collection">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-remoteServer">
+      <i class="fa fa-server"></i> Connection
+    </label>
+    <input type="text" id="node-input-remoteServer" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-operation"
+      ><i class="fa fa-wrench"></i> Operation</label
+    >
+    <select type="text" id="node-input-operation" style="width:70%!important;">
+      <option value="add">add</option>
+      <option value="count">count</option>
+      <option value="delete">delete</option>
+      <option value="get">get</option>
+      <option value="modify">modify</option>
+      <option value="peek">peek</option>
+      <option value="query">query</option>
+      <option value="update">update</option>
+      <option value="upsert">upsert</option>
+    </select>
+  </div>
+
+  <div id="forms-collection">
+    <div class="form-row">
+      <label for="node-input-collection"
+        ><i class="fa fa-database"></i> Collection</label
+      >
+      <input
+        type="text"
+        id="node-input-collection"
+        placeholder="Database Name"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="chromadb-collection">
+  <h3 id="add">add</h3>
+  <p>
+    ▸ <strong>add</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>AddResponse</code>>
+  </p>
+  <p>
+    Add items to the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#add"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+    ids: [<span class="hljs-string">"id1"</span>, <span class="hljs-string">"id2"</span>],
+    embeddings: [
+        [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+        [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>],
+    ],
+    metadatas: [{ key: <span class="hljs-string">"value"</span> }, { key: <span class="hljs-string">"value"</span> }],
+    documents: [<span class="hljs-string">"document1"</span>, <span class="hljs-string">"document2"</span>],
+};
+
+return msg;
+</code></pre>
+  <h3 id="count">count</h3>
+  <p>
+    ▸ <strong>count</strong>(): <code>Promise</code>&lt;<code>number</code>>
+  </p>
+  <p>
+    Count the number of items in the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#count"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+msg.payload = {}<span class="hljs-comment">;</span>
+
+return msg<span class="hljs-comment">;</span>
+</code></pre>
+  <h3 id="delete">delete</h3>
+  <p>
+    ▸ <strong>delete</strong>(<code>params?</code>):
+    <code>Promise</code>&lt;<code>string</code>[]>
+  </p>
+  <p>
+    Deletes items from the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#delete"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue deleting items from the collection.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+    ids: <span class="hljs-string">"some_id"</span>,
+    <span class="hljs-built_in">where</span>: { key: <span class="hljs-string">"value"</span> },
+    <span class="hljs-built_in">where</span>Document: { <span class="hljs-string">"<span class="hljs-variable">$contains</span>"</span>: <span class="hljs-string">"search_string"</span> }
+};
+
+<span class="hljs-built_in">return</span> msg;
+</code></pre>
+  <h3 id="get">get</h3>
+  <p>
+    ▸ <strong>get</strong>(<code>params?</code>):
+    <code>Promise</code>&lt;<code>GetResponse</code>>
+  </p>
+  <p>
+    Get items from the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#get"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+<span class="hljs-symbol">    ids:</span> [<span class="hljs-string">"id1"</span>, <span class="hljs-string">"id2"</span>],
+<span class="hljs-symbol">    where:</span> { key: <span class="hljs-string">"value"</span> },
+<span class="hljs-symbol">    limit:</span> <span class="hljs-number">10</span>,
+<span class="hljs-symbol">    offset:</span> <span class="hljs-number">0</span>,
+<span class="hljs-symbol">    include:</span> [<span class="hljs-string">"embeddings"</span>, <span class="hljs-string">"metadatas"</span>, <span class="hljs-string">"documents"</span>],
+<span class="hljs-symbol">    whereDocument:</span> { $contains: <span class="hljs-string">"value"</span> },
+};
+
+return msg;
+</code></pre>
+  <h3 id="modify">modify</h3>
+  <p>
+    ▸ <strong>modify</strong>(<code>params?</code>):
+    <code>Promise</code>&lt;<code>void</code>>
+  </p>
+  <p>Modify the collection name or metadata</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+msg.payload = {
+<span class="hljs-symbol">    name:</span> <span class="hljs-string">"new collection name"</span>,
+<span class="hljs-symbol">    metadata:</span> { key: <span class="hljs-string">"value"</span> },
+}<span class="hljs-comment">;</span>
+
+return msg<span class="hljs-comment">;</span>
+</code></pre>
+  <h3 id="peek">peek</h3>
+  <p>
+    ▸ <strong>peek</strong>(<code>params?</code>):
+    <code>Promise</code>&lt;<code>GetResponse</code>>
+  </p>
+  <p>
+    Peek inside the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#peek"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue executing the query.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+msg.payload = {
+<span class="hljs-symbol">    limit:</span> <span class="hljs-number">10</span>,
+}<span class="hljs-comment">;</span>
+
+return msg<span class="hljs-comment">;</span>
+</code></pre>
+  <h3 id="query">query</h3>
+  <p>
+    ▸ <strong>query</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>QueryResponse</code>>
+  </p>
+  <p>
+    Performs a query on the collection using the specified parameters.
+    <a href="https://docs.trychroma.com/js_reference/Collection#query"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue executing the query.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js"><span class="hljs-comment">// Query the collection using embeddings</span>
+msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+<span class="hljs-symbol">    queryEmbeddings:</span> [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.2</span>],
+<span class="hljs-symbol">    nResults:</span> <span class="hljs-number">10</span>,
+<span class="hljs-symbol">    where:</span> { key: <span class="hljs-string">"value"</span> },
+<span class="hljs-symbol">    include:</span> [<span class="hljs-string">"metadata"</span>, <span class="hljs-string">"document"</span>]
+};
+
+return msg;
+</code></pre>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js"><span class="hljs-comment">// Query the collection using query text</span>
+msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+<span class="hljs-symbol">    queryTexts:</span> <span class="hljs-string">"some text"</span>,
+<span class="hljs-symbol">    nResults:</span> <span class="hljs-number">10</span>,
+<span class="hljs-symbol">    where:</span> { key: <span class="hljs-string">"value"</span> },
+<span class="hljs-symbol">    include:</span> [<span class="hljs-string">"metadata"</span>, <span class="hljs-string">"document"</span>]
+};
+
+return msg;
+</code></pre>
+  <h3 id="update">update</h3>
+  <p>
+    ▸ <strong>update</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>boolean</code>>
+  </p>
+  <p>
+    Update the embeddings, documents, and/or metadatas of existing items.
+    <a href="https://docs.trychroma.com/js_reference/Collection#update"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+    ids: [<span class="hljs-string">"id1"</span>, <span class="hljs-string">"id2"</span>],
+    embeddings: [
+        [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+        [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>],
+    ],
+    metadatas: [{ key: <span class="hljs-string">"value"</span> }, { key: <span class="hljs-string">"value"</span> }],
+    documents: [<span class="hljs-string">"new document 1"</span>, <span class="hljs-string">"new document 2"</span>],
+};
+
+return msg;
+</code></pre>
+  <h3 id="upsert">upsert</h3>
+  <p>
+    ▸ <strong>upsert</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>boolean</code>>
+  </p>
+  <p>
+    Upsert items to the collection.
+    <a href="https://docs.trychroma.com/js_reference/Collection#upsert"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span>;
+msg.payload = {
+    ids: [<span class="hljs-string">"id1"</span>, <span class="hljs-string">"id2"</span>],
+    embeddings: [
+        [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+        [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>],
+    ],
+    metadatas: [{ key: <span class="hljs-string">"value"</span> }, { key: <span class="hljs-string">"value"</span> }],
+    documents: [<span class="hljs-string">"document1"</span>, <span class="hljs-string">"document2"</span>],
+};
+
+return msg;
+</code></pre>
+</script>

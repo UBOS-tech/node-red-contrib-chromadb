@@ -1,0 +1,38 @@
+{
+  "name": "node-red-contrib-chromadb",
+  "version": "1.0.0",
+  "description": "ChromaDB Node for Node-RED",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UBOS-tech/node-red-contrib-chromadb.git"
+  },
+  "keywords": [
+    "node-red",
+    "vector",
+    "database",
+    "chromadb",
+    "embedding"
+  ],
+  "node-red": {
+    "version": ">=2.0.0",
+    "nodes": {
+      "chroma-client": "chroma-client.js",
+      "chroma-collection": "chroma-collection.js"
+    }
+  },
+  "author": "vovajr11",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UBOS-tech/node-red-contrib-chromadb/issues"
+  },
+  "homepage": "https://github.com/UBOS-tech/node-red-contrib-chromadb#readme",
+  "dependencies": {
+    "chromadb": "^1.6.1"
+  }
+}

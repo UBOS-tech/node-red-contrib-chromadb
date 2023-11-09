@@ -1,0 +1,262 @@
+<script type="text/javascript">
+  RED.nodes.registerType("remote-server-client", {
+    category: "config",
+    defaults: {
+      host: { value: "localhost", required: true },
+    },
+    label: function () {
+      return this.host;
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="remote-server-client">
+  <div class="form-row">
+    <label for="node-config-input-host"
+      ><i class="fa fa-bookmark"></i> Host</label
+    >
+    <input type="text" id="node-config-input-host" />
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("chromadb-client", {
+    category: "UBOS",
+    color: "#08B5FB",
+    defaults: {
+      name: { value: "" },
+      remoteServer: { value: "", type: "remote-server-client" },
+      collection: { value: "" },
+      operation: {
+        value: "listCollections",
+        required: true,
+        validate: function (v) {
+          const operation = String(v);
+
+          switch (operation) {
+            case "listCollections":
+              $("#forms-collection").css("display", "none");
+              break;
+            case "reset":
+              $("#forms-collection").css("display", "none");
+              break;
+            case "version":
+              $("#forms-collection").css("display", "none");
+              break;
+            default:
+              $("#forms-collection").css("display", "block");
+              break;
+          }
+
+          return true;
+        },
+      },
+    },
+
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: "chroma client",
+    icon: "icon.png",
+    label: function () {
+      return this.name || "ChromaDB client";
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="chromadb-client">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-remoteServer">
+      <i class="fa fa-server"></i> Connection
+    </label>
+    <input type="text" id="node-input-remoteServer" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-operation"
+      ><i class="fa fa-wrench"></i> Operation</label
+    >
+    <select type="text" id="node-input-operation" style="width:70%!important;">
+      <option value="listCollections">listCollections</option>
+      <option value="createCollection">createCollection</option>
+      <option value="deleteCollection">deleteCollection</option>
+      <option value="getCollection">getCollection</option>
+      <option value="getOrCreateCollection">getOrCreateCollection</option>
+      <option value="heartbeat">heartbeat</option>
+      <option value="reset">reset</option>
+      <option value="version">version</option>
+    </select>
+  </div>
+
+  <div id="forms-collection">
+    <div class="form-row">
+      <label for="node-input-collection"
+        ><i class="fa fa-database"></i> Collection</label
+      >
+      <input
+        type="text"
+        id="node-input-collection"
+        placeholder="Database Name"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="chromadb-client">
+  <h3 id="createcollection">createCollection</h3>
+  <p>
+    ▸ <strong>createCollection</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>Collection</code>>
+  </p>
+  <p>
+    Creates a new collection with the specified properties.
+    <a href="https://docs.trychroma.com/js_reference/Client#createcollection"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue creating the collection.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+  msg.payload = {
+  <span class="hljs-symbol">    metadata:</span> {
+  <span class="hljs-symbol">        description:</span> <span class="hljs-string">"My first collection"</span>
+      }
+  }<span class="hljs-comment">;</span>
+  
+  return msg<span class="hljs-comment">;</span>
+  </code></pre>
+  <h3 id="deletecollection">deleteCollection</h3>
+  <p>
+    ▸ <strong>deleteCollection</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>void</code>>
+  </p>
+  <p>
+    Deletes a collection with the specified name.
+    <a href="https://docs.trychroma.com/js_reference/Client#deletecollection"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue deleting the collection.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+  msg.payload = {}<span class="hljs-comment">;</span>
+  
+  return msg<span class="hljs-comment">;</span>
+  </code></pre>
+  <h3 id="getcollection">getCollection</h3>
+  <p>
+    ▸ <strong>getCollection</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>Collection</code>>
+  </p>
+  <p>
+    Gets a collection with the specified name.
+    <a href="https://docs.trychroma.com/js_reference/Client#getcollection"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue getting the collection.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+  msg.payload = {}<span class="hljs-comment">;</span>
+  
+  return msg<span class="hljs-comment">;</span>
+  </code></pre>
+  <h3 id="getorcreatecollection">getOrCreateCollection</h3>
+  <p>
+    ▸ <strong>getOrCreateCollection</strong>(<code>params</code>):
+    <code>Promise</code>&lt;<code>Collection</code>>
+  </p>
+  <p>
+    Gets or creates a collection with the specified properties.
+    <a
+      href="https://docs.trychroma.com/js_reference/Client#getorcreatecollection"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue getting or creating the collection.</p>
+  <p>
+    <strong><code>Example</code></strong>
+  </p>
+  <pre><code class="lang-js">msg.collection = <span class="hljs-string">"my_collection"</span><span class="hljs-comment">;</span>
+  msg.payload = {
+  <span class="hljs-symbol">    metadata:</span> {
+  <span class="hljs-symbol">        description:</span> <span class="hljs-string">"My first collection"</span>
+      }
+  }<span class="hljs-comment">;</span>
+  
+  return msg<span class="hljs-comment">;</span>
+  </code></pre>
+  <h3 id="heartbeat">heartbeat</h3>
+  <p>
+    ▸ <strong>heartbeat</strong>(): <code>Promise</code>&lt;<code>number</code>>
+  </p>
+  <p>
+    Returns a heartbeat from the Chroma API.
+    <a href="https://docs.trychroma.com/js_reference/Client#heartbeat"
+      >More details</a
+    >
+  </p>
+  <h3 id="listcollections">listCollections</h3>
+  <p>
+    ▸ <strong>listCollections</strong>():
+    <code>Promise</code>&lt;<code>CollectionType</code>[]>
+  </p>
+  <p>
+    Lists all collections.
+    <a href="https://docs.trychroma.com/js_reference/Client#listCollections"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue listing the collections.</p>
+  <h3 id="reset">reset</h3>
+  <p>
+    ▸ <strong>reset</strong>():
+    <code>Promise</code>&lt;<code>Reset200Response</code>>
+  </p>
+  <p>
+    Resets the state of the object by making an API call to the reset endpoint.
+    <a href="https://docs.trychroma.com/js_reference/Client#reset"
+      >More details</a
+    >
+  </p>
+  <p>
+    <strong><code>Throws</code></strong>
+  </p>
+  <p>If there is an issue resetting the state.</p>
+  <h3 id="version">version</h3>
+  <p>
+    ▸ <strong>version</strong>(): <code>Promise</code>&lt;<code>string</code>>
+  </p>
+  <p>
+    Returns the version of the Chroma API.
+    <a href="https://docs.trychroma.com/js_reference/Client#version"
+      >More details</a
+    >
+  </p>
+</script>
